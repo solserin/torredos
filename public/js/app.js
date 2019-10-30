@@ -6579,22 +6579,3 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 //# sourceMappingURL=axios.map
-var url='https://jsonplaceholder.typicode.com/users';
-
-new Vue({
-    el:'#crud',
-    created:function(){
-        this.getUsers();
-    },
-    data:{
-        list:[]
-    },
-    methods:{
-        getUsers:function(){
-            axios.get(url).then(response=>{
-                this.list=response.data
-                console.log(this.list)
-            });
-        }
-    }
-});

@@ -24,10 +24,27 @@ public function pago(Request $request)
             ));
             return redirect('/')->with('message_exito','Su pago ha sido procesado con exito');
         } catch (\Exception $ex) {
-            return redirect('/')->with('message_error','Cantidad minima');
-            //return back()->withInput();
-            dd($ex);
-            return $ex->getMessage();
+            //manejando las posbiles excepciones
+            $error='Ocurrió un error, por favor verifique sus datos.';
+            //saldo insuficiente
+            if($ex->getDeclineCode()=="insufficient_funds"){
+                $error="Esta tarjeta no cuenta con saldo suficiente.";
+            }else if($ex->getDeclineCode()=="card_declined"){
+                $error="Esta tarjeta ha sido rechazada.";
+            }else if($ex->getDeclineCode()=="lost_card"){
+                $error="Esta tarjeta tiene reporte de extravío.";
+            }else if($ex->getDeclineCode()=="stolen_card"){
+                $error="Esta tarjeta tiene reporte de robo.";
+            }else if($ex->getDeclineCode()=="expired_card"){
+                $error="Esta tarjeta ha expirado.";
+            }else if($ex->getDeclineCode()=="incorrect_cvc"){
+                $error="Por favor verifique su código cvc.";
+            }else if($ex->getDeclineCode()=="processing_error"){
+                $error="Ocurrió un error, por favor reintente.";
+            }else if($ex->getDeclineCode()=="incorrect_number"){
+                $error="Por favor verifique número de tarjeta.";
+            }
+            return redirect('/')->with('message_error',$error);
         }
     }
 }

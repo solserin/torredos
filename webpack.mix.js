@@ -20,6 +20,6 @@ mix.scripts([
     'resources/assets/js/app.js'
 ],'public/js/app.js')
 .styles([
-    'resources/assets/js/bootstrap.css',
-    'resources/assets/js/toastr.css',
-],'public/js/app.css');
+    'resources/assets/css/bootstrap.css',
+    'resources/assets/css/toastr.css',
+],'public/css/app.css');
