@@ -22,7 +22,7 @@ public function pago(Request $request)
                 'amount' => ($request->amountInCents),
                 'currency' => 'mxn',
                 'description'=>"Pago por concepto de renta de departamento: ".($request->txtNombre),
-                'receipt_email' => 'hectorcrzprz@gmail.com',
+                'receipt_email' => $request->stripeEmail,
             ));
             return redirect('/')->with('message_exito','Pago exitoso. Se envió el informe del pago al correo proporcionado.');
         } catch (\Exception $ex) {
