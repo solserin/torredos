@@ -95,7 +95,7 @@
                     <div class="card border-0 shadow my-5" style="background-color: rgba(255, 255, 255, 0.9);">
                         <div class="card-body p-5">
                             <div class="text-center pb-3">
-                                <img style="max-width:50%;" src="{{url('images/logo.jpg')}}" class="rounded" alt="...">
+                                <img style="max-width:50%;" src="{{url('images/logos.jpg')}}" class="rounded" alt="...">
                             </div>
                             <h1>Hausing - Departamentos Torre Dos</h1>
                             <p class="texto-1">Para su mayor comodidad, ya puede realizar los pagos de manera directa y segura.</p>
