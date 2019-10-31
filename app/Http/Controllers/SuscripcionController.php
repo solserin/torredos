@@ -1,10 +1,12 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
+use Throwable;
+use Stripe\Charge;
 use Stripe\Stripe;
 use Stripe\Customer;
-use Stripe\Charge;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+
 class SuscripcionController extends Controller
 {
 public function pago(Request $request)
@@ -17,33 +19,45 @@ public function pago(Request $request)
             ));
         $charge = Charge::create(array(
                 'customer' => $customer->id,
-                'amount' => ($request->valor)*100,
+                'amount' => ($request->amountInCents),
                 'currency' => 'mxn',
-                'description'=>"Pago por concepto de renta de departamento",
+                'description'=>"Pago por concepto de renta de departamento: ".($request->txtNombre),
                 'receipt_email' => 'hectorcrzprz@gmail.com',
             ));
-            return redirect('/')->with('message_exito','Su pago ha sido procesado con exito');
+            return redirect('/')->with('message_exito','Pago exitoso. Se envió el informe del pago al correo proporcionado.');
         } catch (\Exception $ex) {
             //manejando las posbiles excepciones
             $error='Ocurrió un error, por favor verifique sus datos.';
             //saldo insuficiente
-            if($ex->getDeclineCode()=="insufficient_funds"){
-                $error="Esta tarjeta no cuenta con saldo suficiente.";
-            }else if($ex->getDeclineCode()=="card_declined"){
-                $error="Esta tarjeta ha sido rechazada.";
-            }else if($ex->getDeclineCode()=="lost_card"){
-                $error="Esta tarjeta tiene reporte de extravío.";
-            }else if($ex->getDeclineCode()=="stolen_card"){
-                $error="Esta tarjeta tiene reporte de robo.";
-            }else if($ex->getDeclineCode()=="expired_card"){
-                $error="Esta tarjeta ha expirado.";
-            }else if($ex->getDeclineCode()=="incorrect_cvc"){
-                $error="Por favor verifique su código cvc.";
-            }else if($ex->getDeclineCode()=="processing_error"){
-                $error="Ocurrió un error, por favor reintente.";
-            }else if($ex->getDeclineCode()=="incorrect_number"){
-                $error="Por favor verifique número de tarjeta.";
+            //dd($ex);
+            try {
+                if($ex->getDeclineCode()=="insufficient_funds"){
+                    $error="Esta tarjeta no cuenta con saldo suficiente.";
+                }else if($ex->getDeclineCode()=="card_declined"){
+                    $error="Esta tarjeta ha sido rechazada.";
+                }else if($ex->getDeclineCode()=="lost_card"){
+                    $error="Esta tarjeta tiene reporte de extravío.";
+                }else if($ex->getDeclineCode()=="stolen_card"){
+                    $error="Esta tarjeta tiene reporte de robo.";
+                }else if($ex->getDeclineCode()=="expired_card"){
+                    $error="Esta tarjeta ha expirado.";
+                }else if($ex->getDeclineCode()=="incorrect_cvc"){
+                    $error="Por favor verifique su código cvc.";
+                }else if($ex->getDeclineCode()=="processing_error"){
+                    $error="Ocurrió un error, por favor reintente.";
+                }else if($ex->getDeclineCode()=="incorrect_number"){
+                    $error="Por favor verifique número de tarjeta.";
+                }
+            } catch (\Throwable $th) {
+                //error de numero
+                if($ex->getMessage()=="A non well formed numeric value encountered"){
+                    $error='Verifique bien la cantidad por favor';
+                }else{
+                    $error='Ocurrió un error, por favor verifique sus datos y reintente.';
+                }
             }
+
+            
             return redirect('/')->with('message_error',$error);
         }
     }
