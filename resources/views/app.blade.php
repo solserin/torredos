@@ -97,7 +97,7 @@
                             <div class="text-center pb-3">
                                 <img style="max-width:100%;" src="{{url('images/logos.jpg')}}" class="rounded" alt="...">
                             </div>
-                            <h1>Hausing - Departamentos Torre Dos</h1>
+                            <h1>Hausing - Renta de departamentos Mazatlán</h1>
                             <p class="texto-1">Para su mayor comodidad, ya puede realizar los pagos de manera directa y segura.</p>
                             @if(session()->has('message_error'))
                             <div class="alert alert-danger disappear">
@@ -160,7 +160,7 @@
                         var displayAmount = parseFloat(Math.floor($("#amountInDollars").val() * 100) / 100).toFixed(2);
                         // Open Checkout with further options
                         handler.open({
-                            name: 'Departamentos Torre Dos',
+                            name: 'Renta de departamentos',
                             description: ' Monto ($' + formatNumber(displayAmount) + ') Pesos MXN.',
                             locale: 'es',
                             amount: amountInCents,
